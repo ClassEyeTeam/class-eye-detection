@@ -1,0 +1,8 @@
+flask
+pymongo
+opencv-python-headless
+numpy
+mtcnn
+deepface
+scikit-learn
+requests
