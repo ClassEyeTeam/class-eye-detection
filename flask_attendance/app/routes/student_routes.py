@@ -3,6 +3,7 @@ from app.models import Student
 import os
 from app.services.face_service import process_images, recognize_face
 from app.services.attendance_service import record_attendance
+from app.services.group_service import process_group_photo
 from datetime import datetime  # Changed this line
 student_bp = Blueprint("students", __name__, url_prefix="/students")
 
