@@ -1,4 +1,3 @@
-# app/services/attendance_service.py
 import requests
 from flask import jsonify
 from datetime import datetime
