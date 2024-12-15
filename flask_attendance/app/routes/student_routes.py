@@ -6,6 +6,7 @@ from app.services.attendance_service import record_attendance
 from app.services.group_service import process_group_photo
 from app.services.auth_service import require_auth
 from datetime import datetime  
+import pytz
 from werkzeug.datastructures import FileStorage
 from typing import List, Tuple, Dict, Any
 import logging
@@ -157,7 +158,9 @@ def recognize_student():
     recognized_student_id, confidence = recognize_face(image_path)
 
     # Record attendance with current timestamp
-    timestamp = datetime.utcnow().isoformat()
+    local_tz = pytz.timezone('Europe/Paris') 
+    timestamp = datetime.now(local_tz).isoformat()
+
     attendance_data = {
         "student_id": recognized_student_id,
         "timestamp": timestamp
@@ -201,7 +204,8 @@ def recognize_group():
     image.save(group_image_path)
 
     try:
-        timestamp = datetime.utcnow().isoformat()
+        local_tz = pytz.timezone('Europe/Paris') 
+        timestamp = datetime.now(local_tz).isoformat()
         recognized_students, total_faces = process_group_photo(group_image_path, upload_folder)
         
         # Record attendance for recognized students

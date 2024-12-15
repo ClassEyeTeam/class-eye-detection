@@ -1,5 +1,10 @@
 import requests
+import logging
 from flask import jsonify
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 def record_attendance(attendance_data, token):
     # Format data to match Spring DTO
@@ -16,11 +21,14 @@ def record_attendance(attendance_data, token):
             headers={"Authorization": f"Bearer {token}"}
         )
         if response.status_code == 201:
+            logger.info("Attendance recorded successfully for studentId: %s", formatted_data["studentId"])
             return jsonify({
                 "message": "Attendance recorded", 
                 "studentId": formatted_data["studentId"]
             }), 201
         else:
+            logger.error("Failed to record attendance: %s", response.text)
             return jsonify({"error": "Failed to record attendance"}), 500
     except requests.exceptions.RequestException as e:
+        logger.error("RequestException: %s", str(e))
         return jsonify({"error": str(e)}), 500
