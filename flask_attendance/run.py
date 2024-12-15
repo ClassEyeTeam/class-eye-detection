@@ -1,5 +1,9 @@
 from app import create_app
+import os
+from dotenv import load_dotenv
 
+# Load environment variables
+load_dotenv()
 # Create and run the app
 app = create_app()
 

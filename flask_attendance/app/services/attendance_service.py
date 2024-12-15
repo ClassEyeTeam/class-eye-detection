@@ -1,8 +1,7 @@
 import requests
 from flask import jsonify
-from datetime import datetime
 
-def record_attendance(attendance_data):
+def record_attendance(attendance_data, token):
     # Format data to match Spring DTO
     formatted_data = {
         "studentId": int(attendance_data["student_id"]),  # Convert to Long
@@ -13,7 +12,8 @@ def record_attendance(attendance_data):
     try:
         response = requests.post(
             "http://localhost:8088/STUDENT-SERVICE/attendances/face-detection",
-            json=formatted_data
+            json=formatted_data,
+            headers={"Authorization": f"Bearer {token}"}
         )
         if response.status_code == 201:
             return jsonify({
