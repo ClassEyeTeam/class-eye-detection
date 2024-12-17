@@ -1,12 +1,13 @@
 Flask==3.1.0
 pymongo==4.10.1
 requests==2.32.3
-deepface==0.0.69
+tensorflow-cpu==2.15.0
+deepface== 0.0.93
 scikit-learn==1.6.0
-opencv-python==4.5.5.64
+opencv-python-headless==4.5.5.64
 mtcnn==0.1.1
 boto3==1.35.81
 python-dotenv==1.0.1
 python-jose==3.3.0
 pytz==2024.2
-py-eureka-client==0.11.0
+py-eureka-client==0.11.13

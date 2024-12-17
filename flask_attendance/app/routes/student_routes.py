@@ -4,6 +4,8 @@ import os
 from app.services.face_service import process_images, recognize_face
 from app.services.attendance_service import record_attendance
 from app.services.group_service import process_group_photo
+from app.services.student_existe import enable_face_detection
+
 from app.services.auth_service import require_auth
 from datetime import datetime  
 import pytz
@@ -115,6 +117,7 @@ def add_student() -> Tuple[Dict[str, Any], int]:
             # Save to database
             Student.add_student(student_id, embedding)
             logger.info(f"Successfully added student {student_id}")
+            enable_face_detection(student_id, request.headers.get('Authorization').split(" ")[1])
 
             return jsonify({
                 "message": f"Student {student_id} added successfully",
