@@ -12,9 +12,11 @@ services:
       - COGNITO_CLIENT_ID=6pv9g6ad1b0fhfo06v8g9b0alm
       - COGNITO_CLIENT_SECRET=1eudob0bpbieaus6q2edmd3qrahuj65ldd8562rccck6dtbhu4rd
       - MONGO_URI=mongodb://mongo:27017
+      - EUREKA_SERVER=http://discovery-service:8761/eureka
+    networks:
+      - class-network
     depends_on:
       - mongo
-
   mongo:
     image: mongo:4.4.6
     ports:
@@ -24,3 +26,6 @@ services:
 
 volumes:
   mongo-data:
+networks:
+  class-network:
+    driver: bridge
