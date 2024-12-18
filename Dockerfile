@@ -57,7 +57,6 @@ RUN pip install --no-cache-dir \
 
 # Copy application code LAST
 COPY . .
-
 EXPOSE 5000
 
 ENV FLASK_APP=run.py
