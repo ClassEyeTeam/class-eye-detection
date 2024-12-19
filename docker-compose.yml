@@ -5,7 +5,7 @@ services:
     image: facedeetection:latest  # Add this line to use existing image
     build: .
     ports:
-      - "5000:5000"
+      - "5000:5001"
     environment:
       - AWS_REGION=eu-west-3
       - COGNITO_USER_POOL_ID=eu-west-3_H1UTyevos
@@ -20,7 +20,7 @@ services:
   mongo:
     image: mongo:4.4.6
     ports:
-      - "27017:27017"
+      - "27017:27018"
     volumes:
       - mongo-data:/data/db
 
@@ -28,4 +28,3 @@ volumes:
   mongo-data:
 networks:
   class-network:
-    driver: bridge
