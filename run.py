@@ -4,7 +4,8 @@ import os
 import logging
 from dotenv import load_dotenv
 
-logging.basicConfig(level=logging.INFO)
+# Configure logging to output to the console
+logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
 # Load environment variables
@@ -13,8 +14,10 @@ load_dotenv()
 # Create and run the app
 app = create_app()
 
+# Register with Eureka
+eureka_server = os.getenv("EUREKA_SERVER", "http://localhost:8761/eureka")
+logger.info("Eureka server URL: %s", eureka_server)
+register_with_eureka("face-detection-service", 5000)
+
 if __name__ == "__main__":
-    eureka_server = os.getenv("EUREKA_SERVER", "http://localhost:8761/eureka")
-    logger.info("Eureka server URL: %s", eureka_server)
-    register_with_eureka("face-detection-service", 5000)
     app.run(host="0.0.0.0", port=5000)

@@ -53,7 +53,8 @@ RUN pip install --no-deps --no-cache-dir \
         filelock==3.9.0
 RUN pip install --no-cache-dir \
         bs4==0.0.1 
-
+RUN pip install --no-cache-dir \
+        gunicorn==20.1.0
 
 # Copy application code LAST
 COPY . .
@@ -62,4 +63,4 @@ EXPOSE 5000
 ENV FLASK_APP=run.py
 ENV FLASK_RUN_HOST=0.0.0.0
 
-CMD ["flask", "run"]
+CMD ["gunicorn", "--bind", "0.0.0.0:5000", "run:app", "--log-level", "debug", "--access-logfile", "-", "--error-logfile", "-"]s
