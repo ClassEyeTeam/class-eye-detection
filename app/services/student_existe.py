@@ -1,5 +1,6 @@
 import requests
 import logging
+import os
 from flask import jsonify
 
 # Configure logging
@@ -9,11 +10,12 @@ logger = logging.getLogger(__name__)
 def enable_face_detection(student_id: str, token: str):
     """Enable face detection for a student by ID."""
     try:
+        student_service_url = os.getenv("STUDENT_SERVICE_URL", "http://localhost:8088/STUDENT-SERVICE")
         response = requests.post(
-            f"http://localhost:8088/STUDENT-SERVICE/students/face-detection/{student_id}",
+            f"{student_service_url}/students/face-detection/{student_id}",
             headers={
-                "Authorization": f"Bearer {token}",
-                "Content-Type": "application/json"
+            "Authorization": f"Bearer {token}",
+            "Content-Type": "application/json"
             }
         )
         

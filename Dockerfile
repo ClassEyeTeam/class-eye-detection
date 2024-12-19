@@ -63,4 +63,4 @@ EXPOSE 5000
 ENV FLASK_APP=run.py
 ENV FLASK_RUN_HOST=0.0.0.0
 
-CMD ["gunicorn", "--bind", "0.0.0.0:5000", "run:app", "--log-level", "debug", "--access-logfile", "-", "--error-logfile", "-"]s
+CMD ["gunicorn", "--bind", "0.0.0.0:5000", "run:app", "--log-level", "debug", "--access-logfile", "-", "--error-logfile", "-", "--timeout", "180"]
