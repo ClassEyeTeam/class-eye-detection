@@ -54,7 +54,10 @@ RUN pip install --no-deps --no-cache-dir \
 RUN pip install --no-cache-dir \
         bs4==0.0.1 
 RUN pip install --no-cache-dir \
+        paho-mqtt==2.1.0
+RUN pip install --no-cache-dir \
         gunicorn==20.1.0
+
 
 # Copy application code LAST
 COPY . .
