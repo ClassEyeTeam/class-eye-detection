@@ -1,28 +1,31 @@
 import paho.mqtt.client as mqtt
 import cv2
 import numpy as np
-
+import queue
+import threading
 # MQTT settings
 broker = 'test.mosquitto.org'
 port = 1883
 topic = 'esp32/cam'
-
+image_queue = queue.Queue()
 # Callback when a message is received
-def on_message(client, userdata, message):
-    print(f"Received message on topic {message.topic}, size: {len(message.payload)} bytes")
-    try:
-        # Convert binary data to numpy array
-        np_arr = np.frombuffer(message.payload, np.uint8)
-        # Decode image
-        img = cv2.imdecode(np_arr, cv2.IMREAD_COLOR)
-        if img is not None:
-            # Display image
-            cv2.imshow('Received Image', img)
-            cv2.waitKey(1)  # Display the image for 1 ms
-        else:
-            print("Failed to decode image")
-    except Exception as e:
-        print(f"Error processing message: {e}")
+def on_message(client, userdata, msg):
+    # Convert bytes directly to numpy array
+    nparr = np.frombuffer(msg.payload, np.uint8)
+    img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+    if img is None:
+        return
+    
+    # Quick face detection before full recognition
+    face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    faces = face_cascade.detectMultiScale(gray, 1.1, 4)
+    
+    if len(faces) == 0:
+        return
+        
+    # Only proceed with DeepFace if face detected
+    image_queue.put(img)
 
 # Initialize MQTT client
 client = mqtt.Client()
