@@ -4,10 +4,13 @@ import logging
 import cv2
 import numpy as np
 from app.services.face_service import recognize_face
+from app.services.attendance_service import record_attendance
 import queue
 import threading
 import time
 import uuid
+import pytz
+from datetime import datetime
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -22,6 +25,9 @@ if not os.path.exists(IMAGE_SAVE_PATH):
 
 # Queue for images
 image_queue = queue.Queue()
+
+
+# AUTH_TOKEN = get_auth_token()
 
 def on_connect(client, userdata, flags, rc):
     logger.info("Connected to MQTT Broker with result code %s", str(rc))
@@ -43,7 +49,7 @@ def process_image_queue():
     Continuously process incoming images from the queue:
       1) Quickly check for a face with a Haar cascade.
       2) If found, run DeepFace recognition.
-      3) Display result / skip if no face.
+      3) Log result / skip if no face.
       4) Delete the image after processing.
     """
     while True:
@@ -57,12 +63,18 @@ def process_image_queue():
         if img is not None:
             if recognized_student_id:
                 label = f"ID: {recognized_student_id} (conf: {confidence:.2f})"
+                # Record attendance
+                local_tz = pytz.timezone('Europe/Paris') 
+                timestamp = datetime.now(local_tz).isoformat()
+                attendance_data = {
+                    "student_id": recognized_student_id,
+                    "confidence": confidence,
+                    "timestamp": timestamp
+                }
+                record_attendance(attendance_data)
+                logger.info(f"Recognized student: {recognized_student_id}, Confidence: {confidence:.2f}")
             else:
-                label = "No face detected"
-            cv2.putText(img, label, (10, 30),
-                        cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
-            cv2.imshow('Received Image', img)
-            cv2.waitKey(1)
+                logger.info("No face detected")
         else:
             logger.error("Failed to load image for display")
 
@@ -78,6 +90,7 @@ def process_image_queue():
             logger.error("Failed to delete image %s: %s", image_path, e)
 
         image_queue.task_done()
+
 client = mqtt.Client()
 client.on_connect = on_connect
 client.on_message = on_message

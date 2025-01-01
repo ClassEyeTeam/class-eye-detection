@@ -19,7 +19,7 @@ app = create_app()
 # Register with Eureka
 eureka_server = os.getenv("EUREKA_SERVER", "http://localhost:8761/eureka")
 logger.info("Eureka server URL: %s", eureka_server)
-#register_with_eureka("face-detection-service", 5000)
+register_with_eureka("face-detection-service", 5000)
 
 
 mqtt_client.client.loop_start()
