@@ -44,6 +44,7 @@ def process_image_queue():
       1) Quickly check for a face with a Haar cascade.
       2) If found, run DeepFace recognition.
       3) Display result / skip if no face.
+      4) Delete the image after processing.
     """
     while True:
         image_path = image_queue.get()
@@ -69,8 +70,14 @@ def process_image_queue():
         processing_time = end_time - start_time
         logger.info("Processed image in %.2f seconds", processing_time)
 
-        image_queue.task_done()
+        # Delete the image after processing
+        try:
+            os.remove(image_path)
+            logger.info("Deleted image %s", image_path)
+        except Exception as e:
+            logger.error("Failed to delete image %s: %s", image_path, e)
 
+        image_queue.task_done()
 client = mqtt.Client()
 client.on_connect = on_connect
 client.on_message = on_message
