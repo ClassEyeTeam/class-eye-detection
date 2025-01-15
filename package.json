@@ -1,0 +1,12 @@
+{
+  "name": "facedeetection",
+  "version": "1.0.0",
+  "description": "This microservice is part of a university management system designed to handle facial recognition for student attendance. It leverages MongoDB for data storage, TensorFlow for deep learning, and DeepFace for facial recognition.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

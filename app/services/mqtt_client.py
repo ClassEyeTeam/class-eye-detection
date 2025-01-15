@@ -84,7 +84,7 @@ def process_image_queue():
 
         # Delete the image after processing
         try:
-            os.remove(image_path)
+           # os.remove(image_path)
             logger.info("Deleted image %s", image_path)
         except Exception as e:
             logger.error("Failed to delete image %s: %s", image_path, e)
