@@ -72,7 +72,6 @@ def list_students():
         return jsonify({"error": "Internal server error"}), 500
     
 @student_bp.route("/add", methods=["POST"])
-@require_auth
 def add_student() -> Tuple[Dict[str, Any], int]:
     """
     Add a new student with multiple face images.
@@ -117,7 +116,10 @@ def add_student() -> Tuple[Dict[str, Any], int]:
             # Save to database
             Student.add_student(student_id, embedding)
             logger.info(f"Successfully added student {student_id}")
-            enable_face_detection(student_id, request.headers.get('Authorization').split(" ")[1])
+    # Enable face detection and wait for the result
+            response, status_code = enable_face_detection(student_id, "null")
+            if status_code != 200:
+                return jsonify(response), status_code
 
             return jsonify({
                 "message": f"Student {student_id} added successfully",

@@ -30,7 +30,7 @@ def process_images(image_paths):
     for path in image_paths:
         logger.info(f"Processing image: {path}")
         image_start_time = time.time()
-        embedding = DeepFace.represent(path, model_name="Facenet")[0]["embedding"]
+        embedding = DeepFace.represent(path, model_name="Facenet", enforce_detection=False)[0]["embedding"]
         image_end_time = time.time()
         logger.info(f"Time taken to process image {path}: {image_end_time - image_start_time:.2f} seconds")
         embeddings.append(embedding)
